@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Electricity Bill Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button { margin: 5px 0; padding: 8px; width: 100%; }
+    .appliance { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    .results { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>Electricity Bill Calculator</h2>
+
+<div id="applianceContainer">
+  <div class="appliance">
+    <label>Appliance Name:</label>
+    <input type="text" class="name" placeholder="e.g., Fan">
+    <label>Power Rating (in Watts):</label>
+    <input type="number" class="wattage" placeholder="e.g., 75">
+    <label>Hours Used Per Day:</label>
+    <input type="number" class="hours" placeholder="e.g., 5">
+    <label>Number of Units:</label>
+    <input type="number" class="units" placeholder="e.g., 2">
+  </div>
+</div>
+
+<button onclick="addAppliance()">Add Another Appliance</button>
+<br>
+<label>Electricity Rate (per kWh):</label>
+<input type="number" id="rate" placeholder="e.g., 7.5">
+<button onclick="calculateBill()">Calculate Bill</button>
+
+<div class="results" id="result"></div>
+
+<script>
+  function addAppliance() {
+    const container = document.getElementById('applianceContainer');
+    const appliance = document.createElement('div');
+    appliance.className = 'appliance';
+    appliance.innerHTML = `
+      <label>Appliance Name:</label>
+      <input type="text" class="name" placeholder="e.g., TV">
+      <label>Power Rating (in Watts):</label>
+      <input type="number" class="wattage" placeholder="e.g., 100">
+      <label>Hours Used Per Day:</label>
+      <input type="number" class="hours" placeholder="e.g., 3">
+      <label>Number of Units:</label>
+      <input type="number" class="units" placeholder="e.g., 1">
+    `;
+    container.appendChild(appliance);
+  }
+
+  function calculateBill() {
+    const appliances = document.querySelectorAll('.appliance');
+    const rate = parseFloat(document.getElementById('rate').value);
+    let totalKWh = 0;
+
+    appliances.forEach(app => {
+      const wattage = parseFloat(app.querySelector('.wattage').value) || 0;
+      const hours = parseFloat(app.querySelector('.hours').value) || 0;
+      const units = parseFloat(app.querySelector('.units').value) || 0;
+
+      // Energy consumption per appliance: (Watts × Hours × Units × 30) / 1000
+      totalKWh += (wattage * hours * units * 30) / 1000;
+    });
+
+    const bill = totalKWh * rate;
+    document.getElementById('result').textContent =
+      `Total Monthly Consumption: ${totalKWh.toFixed(2)} kWh\nEstimated Monthly Bill: ₹${bill.toFixed(2)}`;
+  }
+</script>
+
+</body>
+</html>
